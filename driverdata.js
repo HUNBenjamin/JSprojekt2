@@ -4,7 +4,7 @@ const data = [
     "2;Logan;Sargeant;2000;Williams;5001;USA",
     "3;Daniel;Ricciardo;1989;Visa RB;4001;Auszrália",
     "4;Lando;Norris;1999;McLaren;51;Egyesült-Királyság",
-    "10;Pierre;Gasly;1996;Alpine;5001;Francia",
+    "10;Pierre;Gasly;1996;Alpine;5001;Franciaország",
     "11;Sergio;Perez;1990;Red Bull;26;Mexikó",
     "14;Fernando;Alonso;1981;Aston Martin;101;Spanyolország",
     "16;Charles;Leclerc;1997;Ferrari;26;Monaco",
