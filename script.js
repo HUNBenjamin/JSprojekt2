@@ -52,9 +52,128 @@ function renderBettingOptions() {
 }
 
 const raceCalendar = [
-    // List of races in the Formula 1 2024 championship calendar
-    // Add race details: name, location, date, etc.
+    {
+        name: "Bahrain Grand Prix",
+        location: "Bahrain International Circuit, Sakhir, Bahrain",
+        date: "Mar 2"
+    },
+    {
+        name: "Saudi Arabian Grand Prix",
+        location: "Jeddah Street Circuit, Jeddah, Saudi Arabia",
+        date: "Mar 9"
+    },
+    {
+        name: "Australian Grand Prix",
+        location: "Albert Park, Melbourne, Australia",
+        date: "Mar 24"
+    },
+    {
+        name: "Japanese Grand Prix",
+        location: "Suzuka Circuit, Suzuka, Japan",
+        date: "Apr 7"
+    },
+    {
+        name: "Chinese Grand Prix",
+        location: "Shanghai International Circuit, Shanghai, China",
+        date: "Apr 21"
+    },
+    {
+        name: "Miami Grand Prix",
+        location: "Miami International Autodrome, Miami, USA",
+        date: "May 5"
+    },
+    {
+        name: "Emilia Romagna Grand Prix",
+        location: "Autodromo Enzo e Dino Ferrari, Imola, Italy",
+        date: "May 19"
+    },
+    {
+        name: "Monaco Grand Prix",
+        location: "Circuit de Monaco, Monte Carlo, Monaco",
+        date: "May 26"
+    },
+    {
+        name: "Canadian Grand Prix",
+        location: "Circuit Gilles Villeneuve, Montreal, Canada",
+        date: "Jun 9"
+    },
+    {
+        name: "Spanish Grand Prix",
+        location: "Circuit de Catalunya, Barcelona, Spain",
+        date: "Jun 23"
+    },
+    {
+        name: "Austrian Grand Prix",
+        location: "Red Bull Ring, Spielberg, Austria",
+        date: "Jun 30"
+    },
+    {
+        name: "British Grand Prix",
+        location: "Silverstone Circuit, Silverstone, United Kingdom",
+        date: "Jul 7"
+    },
+    {
+        name: "Hungarian Grand Prix",
+        location: "Hungaroring, Budapest, Hungary",
+        date: "Jul 21"
+    },
+    {
+        name: "Belgian Grand Prix",
+        location: "Circuit de Spa-Francorchamps, Spa, Belgium",
+        date: "Jul 28"
+    },
+    {
+        name: "Dutch Grand Prix",
+        location: "Circuit Zandvoort, Zandvoort, Netherlands",
+        date: "Aug 25"
+    },
+    {
+        name: "Italian Grand Prix",
+        location: "Autodromo Nazionale Monza, Monza, Italy",
+        date: "Sep 1"
+    },
+    {
+        name: "Azerbaijan Grand Prix",
+        location: "Baku City Circuit, Baku, Azerbaijan",
+        date: "Sep 15"
+    },
+    {
+        name: "Singapore Grand Prix",
+        location: "Marina Bay Street Circuit, Marina Bay, Singapore",
+        date: "Sep 22"
+    },
+    {
+        name: "United States Grand Prix",
+        location: "Circuit of the Americas, Austin, USA",
+        date: "Oct 20"
+    },
+    {
+        name: "Mexican Grand Prix",
+        location: "Autodromo Hermanos Rodriguez, Mexico City, Mexico",
+        date: "Oct 27"
+    },
+    {
+        name: "Brazilian Grand Prix",
+        location: "Autódromo José Carlos Pace, Interlagos, São Paulo, Brazil",
+        date: "Nov 3"
+    },
+    {
+        name: "Las Vegas Grand Prix",
+        location: "Las Vegas Street Circuit, Las Vegas, USA",
+        date: "Nov 24"
+    },
+    {
+        name: "Lusail Grand Prix",
+        location: "Losail International Circuit, Lusail, Qatar",
+        date: "Dec 1"
+    },
+    {
+        name: "Abu Dhabi Grand Prix",
+        location: "Yas Marina Circuit, Abu Dhabi, UAE",
+        date: "Dec 8"
+    }
 ];
+
 
 let currentRaceIndex = 0; // Index of the current race being simulated
 
@@ -66,6 +185,10 @@ const seasonOdds = {}; // Object to store season odds for each driver
 // Function to simulate a single race
 function simulateSingleRace() {
     const race = raceCalendar[currentRaceIndex];
+    if (!race) {
+        console.error("Error: Race object is undefined.");
+        return;
+    }
     const raceResults = calculateRaceResults();
     updateChampionshipStandings(raceResults);
     displayRaceResults(race, raceResults);
@@ -162,6 +285,12 @@ function calculatePoints(position) {
 
 // Function to display race results
 function displayRaceResults(race, raceResults) {
+    console.log("Displaying race results...");
+    if (!race || !race.name) {
+        console.error("Error: Race object is undefined or does not have a name property.");
+        return;
+    }
+
     const raceResultsContainer = document.getElementById('race-results-container');
     const raceHeader = document.createElement('h3');
     raceHeader.textContent = `Race ${currentRaceIndex + 1}: ${race.name}`;
@@ -202,6 +331,8 @@ function updatePlayerMoney(won) {
 
 // Function to display championship standings
 function displayChampionshipStandings() {
+    console.log("Displaying championship standings...");
+
     const standingsContainer = document.getElementById('championship-standings-container');
     standingsContainer.innerHTML = ''; // Clear previous standings
 
@@ -221,3 +352,4 @@ displayChampionshipStandings();
 // Render driver cards and betting options
 renderDriverCards(drivers);
 renderBettingOptions();
+
