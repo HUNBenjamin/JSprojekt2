@@ -51,12 +51,38 @@ function renderBettingOptions() {
     });
 }
 
-// Function to shuffle array
-function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
+const raceCalendar = [
+    // List of races in the Formula 1 2024 championship calendar
+    // Add race details: name, location, date, etc.
+];
+
+let currentRaceIndex = 0; // Index of the current race being simulated
+
+let championshipStandings = {}; // Object to store championship standings
+
+let playerMoney = 1000; // Starting money for the player
+const seasonOdds = {}; // Object to store season odds for each driver
+
+// Function to simulate a single race
+function simulateSingleRace() {
+    const race = raceCalendar[currentRaceIndex];
+    const raceResults = calculateRaceResults();
+    updateChampionshipStandings(raceResults);
+    displayRaceResults(race, raceResults);
+    currentRaceIndex++;
+}
+
+// Function to simulate remaining races
+function simulateRemainingRaces() {
+    for (let i = currentRaceIndex; i < raceCalendar.length; i++) {
+        simulateSingleRace();
     }
+}
+
+// Function to simulate the entire season
+function simulateSeason() {
+    currentRaceIndex = 0;
+    simulateRemainingRaces();
 }
 
 // Function to calculate race results based on season odds
@@ -64,13 +90,8 @@ function calculateRaceResults() {
     const raceResults = [];
 
     drivers.forEach(driver => {
-        // Calculate the probability of winning based on odds
         const winProbability = 1 / driver.seasonOdds;
-
-        // Generate a random number between 0 and 1
         const random = Math.random();
-
-        // Determine the finishing status
         let result;
         if (random < 0.1) {
             result = 'Crashed';
@@ -83,17 +104,14 @@ function calculateRaceResults() {
         raceResults.push({ driver: driver, result: result });
     });
 
-    // Shuffle the race results array to assign positions randomly
     shuffleArray(raceResults);
 
-    // Assign positions to drivers
     raceResults.forEach((result, index) => {
         if (result.result === 'Crashed') {
             result.position = 'DNF';
         } else if (result.result === 'Winner') {
             result.position = 1;
         } else {
-            // Assign position within range 2nd to 20th
             result.position = index + 2;
         }
     });
@@ -101,36 +119,104 @@ function calculateRaceResults() {
     return raceResults;
 }
 
-// Function to simulate a race
-function simulateRace(raceNumber) {
-    const raceResults = calculateRaceResults();
-    console.log(`Race ${raceNumber} Results:`);
+// Function to shuffle array
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+// Function to update championship standings
+function updateChampionshipStandings(raceResults) {
     raceResults.forEach(result => {
-        console.log(`${result.driver.firstName} ${result.driver.lastName}: ${result.result} - Position: ${result.position}`);
+        if (result.result !== 'Crashed') {
+            if (!championshipStandings[result.driver.raceNumber]) {
+                championshipStandings[result.driver.raceNumber] = {
+                    driver: result.driver,
+                    points: 0
+                };
+            }
+            const points = calculatePoints(result.position);
+            championshipStandings[result.driver.raceNumber].points += points;
+        }
     });
 }
 
-// Function to simulate all races
-function simulateAllRaces() {
-    for (let i = 1; i <= 24; i++) {
-        simulateRace(i);
+// Function to calculate points based on finishing position
+function calculatePoints(position) {
+    const pointsMap = {
+        1: 25,
+        2: 18,
+        3: 15,
+        4: 12,
+        5: 10,
+        6: 8,
+        7: 6,
+        8: 4,
+        9: 2,
+        10: 1
+    };
+    return pointsMap[position] || 0;
+}
+
+// Function to display race results
+function displayRaceResults(race, raceResults) {
+    const raceResultsContainer = document.getElementById('race-results-container');
+    const raceHeader = document.createElement('h3');
+    raceHeader.textContent = `Race ${currentRaceIndex + 1}: ${race.name}`;
+    raceResultsContainer.appendChild(raceHeader);
+
+    const resultsList = document.createElement('ul');
+    raceResults.forEach(result => {
+        const position = result.position === 'DNF' ? 'DNF' : `${result.position}th`;
+        const listItem = document.createElement('li');
+        listItem.textContent = `${result.driver.firstName} ${result.driver.lastName}: ${result.result} - Position: ${position}`;
+        resultsList.appendChild(listItem);
+    });
+    raceResultsContainer.appendChild(resultsList);
+}
+
+// Event listener for simulating single race
+document.getElementById('simulate-race').addEventListener('click', simulateSingleRace);
+
+// Event listener for simulating remaining races
+document.getElementById('simulate-races').addEventListener('click', simulateRemainingRaces);
+
+// Event listener for simulating all races
+document.getElementById('simulate-all-races').addEventListener('click', simulateSeason);
+
+// Function to handle betting options
+function placeBet() {
+    // Implement betting logic here
+}
+
+// Function to update player money based on betting results
+function updatePlayerMoney(won) {
+    if (won) {
+        playerMoney *= seasonOdds[currentRaceIndex];
+    } else {
+        playerMoney -= seasonOdds[currentRaceIndex];
     }
 }
 
-// Event listener for race simulation
-document.getElementById('simulate-race').addEventListener('click', () => {
-    const raceNumber = parseInt(document.getElementById('race-number').value);
-    simulateRace(raceNumber);
-});
+// Function to display championship standings
+function displayChampionshipStandings() {
+    const standingsContainer = document.getElementById('championship-standings-container');
+    standingsContainer.innerHTML = ''; // Clear previous standings
 
-// Event listener for simulating all races
-document.getElementById('simulate-all-races').addEventListener('click', () => {
-    for (let i = 1; i <= 24; i++) {
-        simulateRace(i);
-    }
-});
+    const sortedStandings = Object.values(championshipStandings).sort((a, b) => b.points - a.points);
+    const standingsList = document.createElement('ol');
+    sortedStandings.forEach((standing, index) => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `${index + 1}. ${standing.driver.firstName} ${standing.driver.lastName}: ${standing.points} points`;
+        standingsList.appendChild(listItem);
+    });
+    standingsContainer.appendChild(standingsList);
+}
 
-document.getElementById('simulate-races').addEventListener('click', simulateAllRaces);
+// Display initial championship standings
+displayChampionshipStandings();
 
 // Render driver cards and betting options
 renderDriverCards(drivers);

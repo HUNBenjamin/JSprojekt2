@@ -23,6 +23,8 @@
                 <option value="">Select a Driver</option>
                 <!-- Options for drivers -->
             </select>
+        </div>
+        <div>
             <label for="race-number">Race Number:</label>
             <input type="number" id="race-number" min="1" max="24" value="1">
             <button id="place-race-bet">Place Bet</button>
@@ -31,6 +33,15 @@
         <button id="simulate-races">Simulate Races</button>
         <button id="simulate-all-races">Simulate All Races</button>
     </div>
+
+    <div id="race-results-container">
+        <!-- Race results will be displayed here -->
+    </div>
+    
+    <div id="championship-standings-container">
+        <!-- Championship standings will be displayed here -->
+    </div>
+    
 
     <div id="driver-cards-container" class="flex-container"></div>
 
