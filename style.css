@@ -99,3 +99,22 @@ button:hover {
 #place-race-bet {
     margin-left: 10px;
 }
+
+#race-results-container ul {
+    list-style-type: none;
+    border: 2px solid black;
+    border-radius: 5px;
+    padding: 20px;
+    background-color: lightskyblue;
+    max-width: 400px;
+}
+
+#race-results-container ul li {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 20px;
+}
+
+#race-results-container h3 {
+    
+}
