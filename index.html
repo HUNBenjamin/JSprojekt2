@@ -9,29 +9,35 @@
 <body>
     <div id="betting-options">
         <h2>Betting Options</h2>
-        <div>
+        <div class="betting-option">
             <label for="season-long-bet">Season Long Bet:</label>
             <select id="season-long-bet">
                 <option value="">Select a Driver</option>
                 <!-- Options for drivers -->
             </select>
+            <input type="number" id="season-long-bet-amount" min="1" value="1">
             <button id="place-season-bet">Place Bet</button>
         </div>
-        <div>
+        <div class="betting-option">
             <label for="race-bet">Per-Race Bet:</label>
             <select id="race-bet">
                 <option value="">Select a Driver</option>
                 <!-- Options for drivers -->
             </select>
+            <input type="number" id="race-bet-amount" min="1" value="1">
+            <button id="place-race-bet">Place Bet</button>
         </div>
-        <div>
+        
+        <div class="betting-option">
             <label for="race-number">Race Number:</label>
             <input type="number" id="race-number" min="1" max="24" value="1">
             <button id="place-race-bet">Place Bet</button>
         </div>
-        <button id="simulate-race">Simulate Race</button>
-        <button id="simulate-races">Simulate Races</button>
-        <button id="simulate-all-races">Simulate All Races</button>
+        <div class="betting-option">
+            <button id="simulate-race">Simulate Race</button>
+            <button id="simulate-races">Simulate Races</button>
+            <button id="simulate-all-races">Simulate All Races</button>
+        </div>
     </div>
 
     <div id="race-results-container">

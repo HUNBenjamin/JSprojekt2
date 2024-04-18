@@ -316,8 +316,35 @@ document.getElementById('simulate-races').addEventListener('click', simulateRema
 document.getElementById('simulate-all-races').addEventListener('click', simulateSeason);
 
 // Function to handle betting options
-function placeBet() {
-    // Implement betting logic here
+function placeBet(driverName, amount) {
+    const driver = drivers.find(driver => driver.lastName === driverName);
+    if (!driver) {
+        alert('Invalid driver selection!');
+        return;
+    }
+
+    if (amount <= 0) {
+        alert('Invalid bet amount!');
+        return;
+    }
+
+    if (amount > playerMoney) {
+        alert('Bet amount cannot exceed your current balance!');
+        return;
+    }
+
+    // Simulate the race to determine if the bet is won
+    const raceResults = calculateRaceResults();
+    const winner = raceResults.find(result => result.result === 'Winner');
+    if (winner && winner.driver.lastName === driverName) {
+        const odds = driver.seasonOdds;
+        const winnings = amount * odds;
+        playerMoney += winnings;
+        alert(`Congratulations! You won ${winnings} with your bet on ${driverName}!`);
+    } else {
+        playerMoney -= amount;
+        alert(`Sorry, ${driverName} did not win this race.`);
+    }
 }
 
 // Function to update player money based on betting results
@@ -345,6 +372,21 @@ function displayChampionshipStandings() {
     });
     standingsContainer.appendChild(standingsList);
 }
+
+// Function to handle placing a bet on the entire season
+document.getElementById('place-season-bet').addEventListener('click', () => {
+    const selectedDriver = document.getElementById('season-long-bet').value;
+    const betAmount = parseInt(document.getElementById('season-long-bet-amount').value);
+    placeBet(selectedDriver, betAmount);
+});
+
+
+// Function to handle placing a bet on a single race
+document.getElementById('place-race-bet').addEventListener('click', () => {
+    const selectedDriver = document.getElementById('race-bet').value;
+    const betAmount = parseInt(document.getElementById('race-bet-amount').value);
+    placeBet(selectedDriver, betAmount);
+});
 
 // Display initial championship standings
 displayChampionshipStandings();
