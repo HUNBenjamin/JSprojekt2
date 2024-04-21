@@ -1,3 +1,6 @@
+/* CSS */
+
+/* Driver Card Styling */
 .driver-card {
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -33,4 +36,92 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+}
+
+/* Basic Styling */
+body {
+    display: inline-block;
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background-color: rgb(230, 255, 255);
+}
+
+#betting-options {
+    border: 2px solid black;
+    border-radius: 5px;
+    padding: 20px;
+    background-color: lightskyblue;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+h2 {
+    color: #333;
+}
+
+.betting-option {
+    margin-bottom: 10px;
+}
+
+label {
+    display: inline-block;
+    width: 150px;
+    font-weight: bold;
+}
+
+select, input[type="number"] {
+    width: 200px;
+    padding: 5px;
+    border: 1px solid black;
+    border-radius: 3px;
+}
+
+button {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 3px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+button:hover {
+    background-color: grey;
+}
+
+#simulate-races {
+    margin-left: 17.5%;
+}
+
+#simulate-all-races {
+    float: right;
+}
+
+#place-season-bet {
+    margin-left: 10px;
+}
+
+#place-race-bet {
+    margin-left: 10px;
+}
+
+#race-results-container ul {
+    list-style-type: none;
+    border: 2px solid black;
+    border-radius: 5px;
+    padding: 20px;
+    background-color: lightskyblue;
+    max-width: 400px;
+}
+
+#race-results-container ul li {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 20px;
+}
+
+#race-results-container h3 {
+    display: inline-block;
+    
 }
