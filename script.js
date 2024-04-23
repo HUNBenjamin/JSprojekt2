@@ -1,7 +1,81 @@
 import data from './driverdata.js';
-import {Driver} from './driverClass.js';
+import { Driver } from './driverClass.js';
 
 const drivers = Driver.LoadData(data);
+
+// Render betting options for both season-long and per-race bets
+function renderBettingOptions() {
+    const seasonLongBetSelect = document.getElementById('season-long-bet');
+    const raceBetSelect = document.getElementById('race-bet');
+
+    drivers.forEach(driver => {
+        const seasonLongOption = document.createElement('option');
+        seasonLongOption.value = driver.lastName;
+        seasonLongOption.textContent = `${driver.firstName} ${driver.lastName}`;
+        seasonLongBetSelect.appendChild(seasonLongOption);
+
+        const raceOption = document.createElement('option');
+        raceOption.value = driver.lastName;
+        raceOption.textContent = `${driver.firstName} ${driver.lastName}`;
+        raceBetSelect.appendChild(raceOption);
+    });
+}
+
+// Function to handle placing a bet on the entire season
+document.getElementById('place-season-bet').addEventListener('click', () => {
+    const selectedDriver = document.getElementById('season-long-bet').value;
+    const betAmount = parseInt(document.getElementById('season-long-bet-amount').value);
+    placeBet(selectedDriver, betAmount);
+});
+
+
+// Function to handle placing a bet on a single race
+document.getElementById('place-race-bet').addEventListener('click', () => {
+    const selectedDriver = document.getElementById('race-bet').value;
+    const betAmount = parseInt(document.getElementById('race-bet-amount').value);
+    placeBet(selectedDriver, betAmount);
+});
+
+// Function to handle betting options
+function placeBet(driverName, amount) {
+    const driver = drivers.find(driver => driver.lastName === driverName);
+    if (!driver) {
+        alert('Invalid driver selection!');
+        return;
+    }
+
+    if (amount <= 0) {
+        alert('Invalid bet amount!');
+        return;
+    }
+
+    if (amount > playerMoney) {
+        alert('Bet amount cannot exceed your current balance!');
+        return;
+    }
+
+    // Simulate the race to determine if the bet is won
+    const raceResults = calculateRaceResults();
+    const winner = raceResults.find(result => result.result === 'Winner');
+    if (winner && winner.driver.lastName === driverName) {
+        const odds = driver.seasonOdds;
+        const winnings = amount * odds;
+        playerMoney += winnings;
+        alert(`Congratulations! You won ${winnings} with your bet on ${driverName}!`);
+    } else {
+        playerMoney -= amount;
+        alert(`Sorry, ${driverName} did not win this race.`);
+    }
+}
+
+// Function to update player money based on betting results
+function updatePlayerMoney(won) {
+    if (won) {
+        playerMoney *= seasonOdds[currentRaceIndex];
+    } else {
+        playerMoney -= seasonOdds[currentRaceIndex];
+    }
+}
 
 // Function to create a driver card
 function createDriverCard(driver) {
@@ -30,24 +104,6 @@ function renderDriverCards(drivers) {
     drivers.forEach(driver => {
         const card = createDriverCard(driver);
         container.appendChild(card);
-    });
-}
-
-// Render betting options for both season-long and per-race bets
-function renderBettingOptions() {
-    const seasonLongBetSelect = document.getElementById('season-long-bet');
-    const raceBetSelect = document.getElementById('race-bet');
-
-    drivers.forEach(driver => {
-        const seasonLongOption = document.createElement('option');
-        seasonLongOption.value = driver.lastName;
-        seasonLongOption.textContent = `${driver.firstName} ${driver.lastName}`;
-        seasonLongBetSelect.appendChild(seasonLongOption);
-
-        const raceOption = document.createElement('option');
-        raceOption.value = driver.lastName;
-        raceOption.textContent = `${driver.firstName} ${driver.lastName}`;
-        raceBetSelect.appendChild(raceOption);
     });
 }
 
@@ -193,6 +249,8 @@ function simulateSingleRace() {
     updateChampionshipStandings(raceResults);
     displayRaceResults(race, raceResults);
     currentRaceIndex++;
+    displayChampionshipStandings();
+    displayPlayerMoney();
 }
 
 // Function to simulate remaining races
@@ -377,47 +435,6 @@ document.getElementById('simulate-races').addEventListener('click', simulateRema
 // Event listener for simulating all races
 document.getElementById('simulate-all-races').addEventListener('click', simulateSeason);
 
-// Function to handle betting options
-function placeBet(driverName, amount) {
-    const driver = drivers.find(driver => driver.lastName === driverName);
-    if (!driver) {
-        alert('Invalid driver selection!');
-        return;
-    }
-
-    if (amount <= 0) {
-        alert('Invalid bet amount!');
-        return;
-    }
-
-    if (amount > playerMoney) {
-        alert('Bet amount cannot exceed your current balance!');
-        return;
-    }
-
-    // Simulate the race to determine if the bet is won
-    const raceResults = calculateRaceResults();
-    const winner = raceResults.find(result => result.result === 'Winner');
-    if (winner && winner.driver.lastName === driverName) {
-        const odds = driver.seasonOdds;
-        const winnings = amount * odds;
-        playerMoney += winnings;
-        alert(`Congratulations! You won ${winnings} with your bet on ${driverName}!`);
-    } else {
-        playerMoney -= amount;
-        alert(`Sorry, ${driverName} did not win this race.`);
-    }
-}
-
-// Function to update player money based on betting results
-function updatePlayerMoney(won) {
-    if (won) {
-        playerMoney *= seasonOdds[currentRaceIndex];
-    } else {
-        playerMoney -= seasonOdds[currentRaceIndex];
-    }
-}
-
 // Function to display championship standings
 function displayChampionshipStandings() {
     console.log("Displaying championship standings...");
@@ -451,6 +468,8 @@ function displayPlayerMoney() {
 function init() {
     renderDriverCards(drivers);
     renderBettingOptions();
+    displayChampionshipStandings();
+    displayPlayerMoney();
 }
 
 // Initialize the application
