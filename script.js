@@ -212,29 +212,40 @@ function simulateSeason() {
 function calculateRaceResults() {
     let raceResults = [];
 
-    let isThereWinner = false; 
     drivers.forEach(driver => {
         const winProbability = 1 / driver.seasonOdds;
         const random = Math.random();
         let result;
         if (random < 0.1) {
             result = 'Crashed';
-        } else if (random < winProbability) {
+        }
+        else if (random < winProbability) {
+        }   
+        else {
             result = 'Winner';
-            isThereWinner = true;
-        } else {
             result = 'Finished';
         }
         raceResults.push({ driver: driver, result: result });
     });
 
-    if(!isThereWinner) raceResults[Math.floor(Math.random()*raceResults.length)].result = "Winner";
+    let winnerCount = 0;
+    for (let i = 0; i < raceResults.length; i++) {
+        if (raceResults[i].result === 'Winner') {
+            winnerCount++;
+        }
+    }
+
+    if (winnerCount !== 1) {
+        let winnerIndex = Math.floor(Math.random() * raceResults.length);
+        while (raceResults[winnerIndex].result === 'Crashed') {
+            winnerIndex = Math.floor(Math.random() * raceResults.length);
+        }
+        raceResults[winnerIndex].result = 'Winner';
+    }
 
     shuffleArray(raceResults);
-    
 
     let startPosCounter = 2;
-
 
     raceResults.forEach((result, _) => {
         if (result.result === 'Crashed') {
@@ -247,10 +258,9 @@ function calculateRaceResults() {
         }
     });
 
-    raceResults = selectionSortByPosition(raceResults)
+    raceResults = selectionSortByPosition(raceResults);
     return raceResults;
 }
-
 
 //Function to sort raceResults array by position
 function selectionSortByPosition(array){
@@ -346,7 +356,7 @@ function displayRaceResults(race, raceResults) {
     const resultsList = document.createElement('ul');
     raceResults.forEach(result => {
         // sortByFinishPlace(result)
-        const position = result.position === 'DNF' ? 'DNF' : `${result.position}th`;
+        const position = result.position === 'DNF' ? 'DNF' : `${result.position}`;
         const listItem = document.createElement('li');
         listItem.textContent = `${result.driver.firstName} ${result.driver.lastName}: ${result.result} - Position: ${position}`;
         resultsList.appendChild(listItem);
@@ -416,34 +426,32 @@ function displayChampionshipStandings() {
     standingsContainer.innerHTML = ''; // Clear previous standings
 
     const sortedStandings = Object.values(championshipStandings).sort((a, b) => b.points - a.points);
+
+    const standingsHeader = document.createElement('h3');
+    standingsHeader.textContent = 'Championship Standings';
+    standingsContainer.appendChild(standingsHeader);
+
     const standingsList = document.createElement('ol');
     sortedStandings.forEach((standing, index) => {
         const listItem = document.createElement('li');
-        listItem.textContent = `${index + 1}. ${standing.driver.firstName} ${standing.driver.lastName}: ${standing.points} points`;
+        listItem.textContent = `${index + 1}: ${standing.driver.firstName} ${standing.driver.lastName} - ${standing.points} points`;
         standingsList.appendChild(listItem);
     });
     standingsContainer.appendChild(standingsList);
 }
 
-// Function to handle placing a bet on the entire season
-document.getElementById('place-season-bet').addEventListener('click', () => {
-    const selectedDriver = document.getElementById('season-long-bet').value;
-    const betAmount = parseInt(document.getElementById('season-long-bet-amount').value);
-    placeBet(selectedDriver, betAmount);
-});
+// Function to display player money
+function displayPlayerMoney() {
+    console.log("Displaying player money...");
+    const moneyDisplay = document.getElementById('money-display');
+    moneyDisplay.textContent = `Money: $${playerMoney}`;
+}
 
+// Function to initialize the application
+function init() {
+    renderDriverCards(drivers);
+    renderBettingOptions();
+}
 
-// Function to handle placing a bet on a single race
-document.getElementById('place-race-bet').addEventListener('click', () => {
-    const selectedDriver = document.getElementById('race-bet').value;
-    const betAmount = parseInt(document.getElementById('race-bet-amount').value);
-    placeBet(selectedDriver, betAmount);
-});
-
-// Display initial championship standings
-displayChampionshipStandings();
-
-// Render driver cards and betting options
-renderDriverCards(drivers);
-renderBettingOptions();
-
+// Initialize the application
+init();
