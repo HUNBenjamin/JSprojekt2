@@ -279,10 +279,13 @@ function calculateRaceResults() {
         } else if (random < winProbability) {
             result = 'Winner';
         } else {
-           result = 'Finished';
+            result = 'Finished';
         }
         raceResults.push({ driver: driver, result: result });
     });
+
+    // Calculate race results based on driver's odds
+    raceResults.sort((a, b) => a.driver.seasonOdds - b.driver.seasonOdds);
 
     let winnerCount = 0;
     for (let i = 0; i < raceResults.length; i++) {
@@ -357,7 +360,12 @@ function swapArrayPlaces(resultArray,ix,iy){
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
+        // Adjust shuffling based on season odds
+        const probability1 = 1 / array[i].driver.seasonOdds;
+        const probability2 = 1 / array[j].driver.seasonOdds;
+        if (Math.random() < probability1 / (probability1 + probability2)) {
+            [array[i], array[j]] = [array[j], array[i]];
+        }
     }
 }
 
@@ -449,7 +457,7 @@ function displayChampionshipStandings() {
     const standingsList = document.createElement('ol');
     sortedStandings.forEach((standing, index) => {
         const listItem = document.createElement('li');
-        listItem.textContent = `${index + 1}: ${standing.driver.firstName} ${standing.driver.lastName} - ${standing.points} points`;
+        listItem.textContent = ` ${standing.driver.firstName} ${standing.driver.lastName} - ${standing.points} points`;
         standingsList.appendChild(listItem);
     });
     standingsContainer.appendChild(standingsList);
