@@ -532,10 +532,12 @@ function displayChampionshipStandings() {
     standingsContainer.appendChild(standingsHeader);
 
     const standingsList = document.createElement('ol');
+    let szamozas = 1
     sortedStandings.forEach((standing, index) => {
         const listItem = document.createElement('li');
-        listItem.innerHTML = `<img src="images/${standing.driver.firstName}-${standing.driver.lastName}.png" alt="" style="width: 60px;"> ${standing.driver.firstName} ${standing.driver.lastName} - ${standing.points} points`;
+        listItem.innerHTML = `${szamozas}. <img src="images/${standing.driver.firstName}-${standing.driver.lastName}.png" alt="" style="width: 60px;"> ${standing.driver.firstName} ${standing.driver.lastName} - ${standing.points} points`;
         standingsList.appendChild(listItem);
+        szamozas++;
     });
     standingsContainer.appendChild(standingsList);
 }
