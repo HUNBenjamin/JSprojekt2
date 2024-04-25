@@ -70,17 +70,20 @@ document.getElementById('place-race-bet').addEventListener('click', () => {
 function placeBet(driverName, amount) {
     const driver = drivers.find(driver => driver.lastName === driverName);
     if (!driver) {
-        alert('Invalid driver selection!');
+        document.getElementById('money-warning').innerHTML = 'Invalid driver selection!';
+        document.getElementById('betResult').innerHTML = '';
         return;
     }
 
     if (amount <= 0) {
-        alert('Invalid bet amount!');
+        document.getElementById('money-warning').innerHTML = 'Invalid bet amount!';
+        document.getElementById('betResult').innerHTML = '';
         return;
     }
 
     if (amount > playerMoney) {
-        alert('Bet amount cannot exceed your current balance!');
+        document.getElementById('money-warning').innerHTML = 'Bet amount cannot exceed your current balance!';
+        document.getElementById('betResult').innerHTML = '';
         return;
     }
 
@@ -91,10 +94,12 @@ function placeBet(driverName, amount) {
         const odds = driver.seasonOdds;
         const winnings = amount * odds;
         playerMoney += winnings;
-        alert(`Congratulations! You won ${winnings} with your bet on ${driverName}!`);
+        document.getElementById('betResult').innerHTML = `Congratulations! You won ${winnings} with your bet on ${driverName}!`;
+        document.getElementById('money-warning').innerHTML = '';
     } else {
         playerMoney -= amount;
-        alert(`Sorry, ${driverName} did not win this race.`);
+        document.getElementById('betResult').innerHTML = `Sorry, ${driverName} did not win this race.`;
+        document.getElementById('money-warning').innerHTML = '';
     }
 }
 
