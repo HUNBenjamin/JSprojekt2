@@ -312,20 +312,21 @@ function simulateRemainingRaces() {
         simulateSingleRace();
     }
     settleSeasonLongBets();
+    displayPlayerMoney();
 }
 
 // Function to simulate the entire season
 function simulateSeason() {
-    function simulateSeason() {
-        while (currentRaceIndex < raceCalendar.length) {
-            simulateSingleRace();
-        }
-        // After all races have been simulated, settle season-long bets
-        settleSeasonLongBets();
+    while (currentRaceIndex < raceCalendar.length) {
+        simulateSingleRace();
     }
+    // After all races have been simulated, settle season-long bets
+    settleSeasonLongBets();
+    displayPlayerMoney()
 }
 
 function settleSeasonLongBets() {
+    document.getElementById('betResult').innerHTML = ''
     const finalStandings = Object.values(championshipStandings).sort((a, b) => b.points - a.points);
     seasonLongBets.forEach(bet => {
         const driverStanding = finalStandings.find(standing => standing.driver.lastName === bet.driver.lastName);
@@ -340,7 +341,6 @@ function settleSeasonLongBets() {
         }
     });
     seasonLongBets = []; // Clear season-long bets after settling
-    document.getElementById('betResult').innerHTML = '';
 }
 
 // Function to calculate race results based on season odds
