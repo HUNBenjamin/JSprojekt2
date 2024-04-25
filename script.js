@@ -142,8 +142,9 @@ function placeSeasonBet(driverName, amount) {
 
 // Function to update player money based on betting results
 function updatePlayerMoney(won) {
+    let péz = playerMoney
     if (won) {
-        playerMoney *= seasonOdds[currentRaceIndex];
+        playerMoney *= seasonOdds[currentRaceIndex] - péz;
     } else {
         playerMoney -= seasonOdds[currentRaceIndex];
     }
@@ -293,6 +294,9 @@ function simulateSingleRace() {
     }
     // Simulate the race to determine if the bet is won
     const raceResults = calculateRaceResults();
+    if (raceResults) { // Check if raceResults is defined
+        displayBettingResults(raceResults);
+    }
     updateChampionshipStandings(raceResults);
     displayRaceResults(raceCalendar[currentRaceIndex], raceResults);
     displayBettingResults(raceResults);
@@ -312,11 +316,13 @@ function simulateRemainingRaces() {
 
 // Function to simulate the entire season
 function simulateSeason() {
-    while (currentRaceIndex < raceCalendar.length) {
-        simulateSingleRace();
+    function simulateSeason() {
+        while (currentRaceIndex < raceCalendar.length) {
+            simulateSingleRace();
+        }
+        // After all races have been simulated, settle season-long bets
+        settleSeasonLongBets();
     }
-    simulateRemainingRaces();
-    settleSeasonLongBets();
 }
 
 function settleSeasonLongBets() {
