@@ -296,8 +296,8 @@ function simulateSingleRace() {
     updateChampionshipStandings(raceResults);
     displayRaceResults(raceCalendar[currentRaceIndex], raceResults);
     displayBettingResults(raceResults);
-    currentRaceIndex++;
     displayChampionshipStandings();
+    currentRaceIndex++; // Move the increment inside the function
     displayPlayerMoney();
 }
 
