@@ -120,10 +120,6 @@ button:hover {
     margin-left: 20px;
 }
 
-#race-results-container h3 {
-    
-}
-
 /* Basic Styling */
 body {
     display: inline-block;
@@ -199,6 +195,7 @@ button:hover {
     padding: 20px;
     background-color: lightskyblue;
     max-width: 400px;
+    margin-left: 450px;
 }
 
 #race-results-container ul li {
@@ -209,5 +206,52 @@ button:hover {
 
 #race-results-container h3 {
     display: inline-block;
+    margin-left: 530px;
     
+}
+
+#championship-standings-container ol {
+    list-style-type: none;
+    border: 2px solid black;
+    border-radius: 5px;
+    padding: 20px;
+    background-color: lightskyblue;
+    max-width: 400px;
+}
+
+#championship-standings-container ol li {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 20px;
+}
+
+#championship-standings-container h3 {
+    display: inline-block;
+    margin-left: 100px;
+    
+}
+
+#main-container {
+    display: flex;
+}
+
+#race-results-container,
+#championship-standings-container {
+    flex: 1;
+    margin-right: 20px;
+}
+
+#money-container {
+    text-align: center;
+    border: 2px solid black;
+    border-radius: 5px;
+    padding: 20px;
+    background-color: lightskyblue;
+    max-width: 600px;
+    margin: 0 auto;
+    margin-top: 10px;
+}
+
+#money-display {
+    margin-bottom: 10px;
 }
