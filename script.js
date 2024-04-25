@@ -51,13 +51,16 @@ function renderBettingOptions() {
     });
 }
 
+// Store betting information
+let bets = [];
+let seasonLongBets = [];
+
 // Function to handle placing a bet on the entire season
 document.getElementById('place-season-bet').addEventListener('click', () => {
     const selectedDriver = document.getElementById('season-long-bet').value;
     const betAmount = parseInt(document.getElementById('season-long-bet-amount').value);
-    placeBet(selectedDriver, betAmount);
+    placeSeasonBet(selectedDriver, betAmount);
 });
-
 
 // Function to handle placing a bet on a single race
 document.getElementById('place-race-bet').addEventListener('click', () => {
@@ -87,20 +90,54 @@ function placeBet(driverName, amount) {
         return;
     }
 
-    // Simulate the race to determine if the bet is won
-    const raceResults = calculateRaceResults();
-    const winner = raceResults.find(result => result.result === 'Winner');
-    if (winner && winner.driver.lastName === driverName) {
-        const odds = driver.seasonOdds;
-        const winnings = amount * odds;
-        playerMoney += winnings;
-        document.getElementById('betResult').innerHTML = `Congratulations! You won ${winnings} with your bet on ${driverName}!`;
-        document.getElementById('money-warning').innerHTML = '';
-    } else {
-        playerMoney -= amount;
-        document.getElementById('betResult').innerHTML = `Sorry, ${driverName} did not win this race.`;
-        document.getElementById('money-warning').innerHTML = '';
+    bets.push({ driver: driver, amount: amount });
+    document.getElementById('money-warning').innerHTML = 'Bet placed successfully!';
+}
+
+// Function to calculate and display betting results
+function displayBettingResults(raceResults) {
+    bets.forEach(bet => {
+        const winner = raceResults.find(result => result.result === 'Winner' && result.driver.lastName === bet.driver.lastName);
+        if (winner) {
+            const odds = bet.driver.seasonOdds;
+            const winnings = bet.amount * odds;
+            playerMoney += winnings;
+            document.getElementById('betResult').innerHTML += `Congratulations! You won ${winnings} with your bet on ${bet.driver.firstName} ${bet.driver.lastName}!<br>`;
+            document.getElementById('money-warning').innerHTML = '';
+        } else {
+            playerMoney -= bet.amount;
+            document.getElementById('betResult').innerHTML += `Sorry, ${bet.driver.firstName} ${bet.driver.lastName} did not win this race.<br>`;
+            document.getElementById('money-warning').innerHTML = '';
+        }
+    });
+    bets = []; // Clear bets after displaying results
+}
+
+function placeSeasonBet(driverName, amount) {
+    const driver = drivers.find(driver => driver.lastName === driverName);
+    if (!driver) {
+        document.getElementById('money-warning').innerHTML = 'Invalid driver selection!';
+        document.getElementById('betResult').innerHTML = '';
+        return;
     }
+
+    if (amount <= 0) {
+        document.getElementById('money-warning').innerHTML = 'Invalid bet amount!';
+        document.getElementById('betResult').innerHTML = '';
+        return;
+    }
+
+    if (amount > playerMoney) {
+        document.getElementById('money-warning').innerHTML = 'Bet amount cannot exceed your current balance!';
+        document.getElementById('betResult').innerHTML = '';
+        return;
+    }
+
+    // Add the bet to the seasonLongBets array
+    seasonLongBets.push({ driver, amount });
+
+    document.getElementById('betResult').innerHTML = `You placed a season-long bet on ${driverName}.`;
+    document.getElementById('money-warning').innerHTML = '';
 }
 
 // Function to update player money based on betting results
@@ -245,30 +282,59 @@ const seasonOdds = {}; // Object to store season odds for each driver
 
 // Function to simulate a single race
 function simulateSingleRace() {
+    // Clear previous race results
+    const raceResultsContainer = document.getElementById('race-results-container');
+    raceResultsContainer.innerHTML = '';
+
     const race = raceCalendar[currentRaceIndex];
     if (!race) {
         console.error("Error: Race object is undefined.");
         return;
     }
+    // Simulate the race to determine if the bet is won
     const raceResults = calculateRaceResults();
     updateChampionshipStandings(raceResults);
-    displayRaceResults(race, raceResults);
+    displayRaceResults(raceCalendar[currentRaceIndex], raceResults);
+    displayBettingResults(raceResults);
     currentRaceIndex++;
     displayChampionshipStandings();
     displayPlayerMoney();
 }
+
 
 // Function to simulate remaining races
 function simulateRemainingRaces() {
     for (let i = currentRaceIndex; i < raceCalendar.length; i++) {
         simulateSingleRace();
     }
+    settleSeasonLongBets();
 }
 
 // Function to simulate the entire season
 function simulateSeason() {
-    currentRaceIndex = 0;
+    while (currentRaceIndex < raceCalendar.length) {
+        simulateSingleRace();
+    }
     simulateRemainingRaces();
+    settleSeasonLongBets();
+}
+
+function settleSeasonLongBets() {
+    const finalStandings = Object.values(championshipStandings).sort((a, b) => b.points - a.points);
+    seasonLongBets.forEach(bet => {
+        const driverStanding = finalStandings.find(standing => standing.driver.lastName === bet.driver.lastName);
+        if (driverStanding) {
+            const odds = bet.driver.seasonOdds;
+            const winnings = bet.amount * odds;
+            playerMoney += winnings;
+            document.getElementById('betResult').innerHTML += `Congratulations! You won ${winnings} with your season-long bet on ${bet.driver.firstName} ${bet.driver.lastName}!<br>`;
+        } else {
+            playerMoney -= bet.amount;
+            document.getElementById('betResult').innerHTML += `Sorry, ${bet.driver.firstName} ${bet.driver.lastName} did not finish in the championship standings.<br>`;
+        }
+    });
+    seasonLongBets = []; // Clear season-long bets after settling
+    document.getElementById('betResult').innerHTML = '';
 }
 
 // Function to calculate race results based on season odds
@@ -427,7 +493,7 @@ function displayRaceResults(race, raceResults) {
         // sortByFinishPlace(result)
         const position = result.position === 'DNF' ? 'DNF' : `${result.position}`;
         const listItem = document.createElement('li');
-        listItem.textContent = `${result.driver.firstName} ${result.driver.lastName}: ${result.result} - Position: ${position}`;
+        listItem.innerHTML = `<img src="images/${result.driver.firstName}-${result.driver.lastName}.png" alt="" style="width: 60px;"> ${result.driver.firstName} ${result.driver.lastName}: ${result.result} - Position: ${position}`;
         resultsList.appendChild(listItem);
     });
     raceResultsContainer.appendChild(resultsList);
@@ -462,7 +528,7 @@ function displayChampionshipStandings() {
     const standingsList = document.createElement('ol');
     sortedStandings.forEach((standing, index) => {
         const listItem = document.createElement('li');
-        listItem.textContent = ` ${standing.driver.firstName} ${standing.driver.lastName} - ${standing.points} points`;
+        listItem.innerHTML = `<img src="images/${standing.driver.firstName}-${standing.driver.lastName}.png" alt="" style="width: 60px;"> ${standing.driver.firstName} ${standing.driver.lastName} - ${standing.points} points`;
         standingsList.appendChild(listItem);
     });
     standingsContainer.appendChild(standingsList);
