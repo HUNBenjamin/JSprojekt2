@@ -73,25 +73,25 @@ document.getElementById('place-race-bet').addEventListener('click', () => {
 function placeBet(driverName, amount) {
     const driver = drivers.find(driver => driver.lastName === driverName);
     if (!driver) {
-        document.getElementById('money-warning').innerHTML = 'Invalid driver selection!';
+        document.getElementById('money-warning').innerHTML = 'Kérem válasszon egy versenyzőt!';
         document.getElementById('betResult').innerHTML = '';
         return;
     }
 
     if (amount <= 0) {
-        document.getElementById('money-warning').innerHTML = 'Invalid bet amount!';
+        document.getElementById('money-warning').innerHTML = 'A tétnek minimum 1$-nak kell lennie!';
         document.getElementById('betResult').innerHTML = '';
         return;
     }
 
     if (amount > playerMoney) {
-        document.getElementById('money-warning').innerHTML = 'Bet amount cannot exceed your current balance!';
+        document.getElementById('money-warning').innerHTML = 'Ennyi pénze nincsen, válasszon egy kisebb értéket!';
         document.getElementById('betResult').innerHTML = '';
         return;
     }
 
     bets.push({ driver: driver, amount: amount });
-    document.getElementById('money-warning').innerHTML = 'Bet placed successfully!';
+    document.getElementById('money-warning').innerHTML = 'Sikeres fogadás!';
 }
 
 // Function to calculate and display betting results
@@ -102,11 +102,11 @@ function displayBettingResults(raceResults) {
             const odds = bet.driver.seasonOdds;
             const winnings = bet.amount * odds;
             playerMoney += winnings;
-            document.getElementById('betResult').innerHTML += `Congratulations! You won ${winnings} with your bet on ${bet.driver.firstName} ${bet.driver.lastName}!<br>`;
+            document.getElementById('betResult').innerHTML += `Gratulálok! ${winnings}$-t nyertél ${bet.driver.firstName} ${bet.driver.lastName} versenyzőre fogadásoddal!<br>`;
             document.getElementById('money-warning').innerHTML = '';
         } else {
             playerMoney -= bet.amount;
-            document.getElementById('betResult').innerHTML += `Sorry, ${bet.driver.firstName} ${bet.driver.lastName} did not win this race.<br>`;
+            document.getElementById('betResult').innerHTML += `Sajnos ${bet.driver.firstName} ${bet.driver.lastName} nem nyerte meg ezt a versenyt!<br>`;
             document.getElementById('money-warning').innerHTML = '';
         }
     });
@@ -116,19 +116,19 @@ function displayBettingResults(raceResults) {
 function placeSeasonBet(driverName, amount) {
     const driver = drivers.find(driver => driver.lastName === driverName);
     if (!driver) {
-        document.getElementById('money-warning').innerHTML = 'Invalid driver selection!';
+        document.getElementById('money-warning').innerHTML = 'Kérem válasszon ki egy versenyzőt';
         document.getElementById('betResult').innerHTML = '';
         return;
     }
 
     if (amount <= 0) {
-        document.getElementById('money-warning').innerHTML = 'Invalid bet amount!';
+        document.getElementById('money-warning').innerHTML = 'A tétnek minimum 1$-nak kell lennie!';
         document.getElementById('betResult').innerHTML = '';
         return;
     }
 
     if (amount > playerMoney) {
-        document.getElementById('money-warning').innerHTML = 'Bet amount cannot exceed your current balance!';
+        document.getElementById('money-warning').innerHTML = 'Ennyi pénze nincsen, válasszon egy kisebb értéket!';
         document.getElementById('betResult').innerHTML = '';
         return;
     }
@@ -136,7 +136,7 @@ function placeSeasonBet(driverName, amount) {
     // Add the bet to the seasonLongBets array
     seasonLongBets.push({ driver, amount });
 
-    document.getElementById('betResult').innerHTML = `You placed a season-long bet on ${driverName}.`;
+    document.getElementById('betResult').innerHTML = `Sikeres fogadás ${driverName} versenyzőre.`;
     document.getElementById('money-warning').innerHTML = '';
 }
 
@@ -333,10 +333,10 @@ function settleSeasonLongBets() {
             const odds = bet.driver.seasonOdds;
             const winnings = bet.amount * odds;
             playerMoney += winnings;
-            document.getElementById('betResult').innerHTML += `Congratulations! You won ${winnings} with your season-long bet on ${bet.driver.firstName} ${bet.driver.lastName}!<br>`;
+            document.getElementById('betResult').innerHTML += `Gratulálok! ${winnings} a teljes szezonú fogadásog ${bet.driver.firstName} ${bet.driver.lastName} versenyzőre nyert!<br>`;
         } else {
             playerMoney -= bet.amount;
-            document.getElementById('betResult').innerHTML += `Sorry, ${bet.driver.firstName} ${bet.driver.lastName} did not finish in the championship standings.<br>`;
+            document.getElementById('betResult').innerHTML += `Sajnos ${bet.driver.firstName} ${bet.driver.lastName} nem nyerte meg a bajnokságot.<br>`;
         }
     });
     seasonLongBets = []; // Clear season-long bets after settling

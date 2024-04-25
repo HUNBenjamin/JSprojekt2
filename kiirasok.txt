@@ -1,0 +1,12 @@
+Kérem válasszon egy versenyzőt!
+A tétnek minimum 1$-nak kell lennie!
+Ennyi pénze nincsen, válasszon egy kisebb értéket!
+Sikeres fogadás!
+Gratulálok! ${winnings}$-t nyertél ${bet.driver.firstName} ${bet.driver.lastName} versenyzőre fogadásoddal!
+Sajnos ${bet.driver.firstName} ${bet.driver.lastName} nem nyerte meg ezt a versenyt!
+
+
+
+Sikeres fogadás ${driverName} versenyzőre.
+Gratulálok! ${winnings} a teljes szezonú fogadásog ${bet.driver.firstName} ${bet.driver.lastName} versenyzőre nyert!
+Sajnos ${bet.driver.firstName} ${bet.driver.lastName} nem nyerte meg a bajnokságot.
