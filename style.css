@@ -90,7 +90,7 @@ button:hover {
 }
 
 #simulate-races {
-    margin-left: 17.5%;
+    margin-left: 8%;
 }
 
 #simulate-all-races {
@@ -172,10 +172,6 @@ button:hover {
     background-color: grey;
 }
 
-#simulate-races {
-    margin-left: 17.5%;
-}
-
 #simulate-all-races {
     float: right;
 }
@@ -188,6 +184,7 @@ button:hover {
     margin-left: 10px;
 }
 
+
 #race-results-container ul {
     list-style-type: none;
     border: 2px solid black;
@@ -195,7 +192,7 @@ button:hover {
     padding: 20px;
     background-color: lightskyblue;
     max-width: 400px;
-    margin-left: 450px;
+    margin: auto;
 }
 
 #race-results-container ul li {
@@ -205,9 +202,7 @@ button:hover {
 }
 
 #race-results-container h3 {
-    display: inline-block;
-    margin-left: 530px;
-    
+    text-align: center;
 }
 
 #championship-standings-container ol {
@@ -217,6 +212,7 @@ button:hover {
     padding: 20px;
     background-color: lightskyblue;
     max-width: 400px;
+    margin: auto;
 }
 
 #championship-standings-container ol li {
@@ -226,9 +222,7 @@ button:hover {
 }
 
 #championship-standings-container h3 {
-    display: inline-block;
-    margin-left: 100px;
-    
+    text-align: center;
 }
 
 #main-container {

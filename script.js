@@ -553,7 +553,6 @@ function displayPlayerMoney() {
 function init() {
     renderDriverCards(drivers);
     renderBettingOptions();
-    displayChampionshipStandings();
     displayPlayerMoney();
 }
 
