@@ -491,7 +491,7 @@ function displayRaceResults(race, raceResults) {
 
     const raceResultsContainer = document.getElementById('race-results-container');
     const raceHeader = document.createElement('h3');
-    raceHeader.textContent = `Race ${currentRaceIndex + 1}: ${race.name}`;
+    raceHeader.textContent = `${currentRaceIndex + 1} Verseny: ${race.name}`;
     raceResultsContainer.appendChild(raceHeader);
 
     const resultsList = document.createElement('ul');
@@ -499,7 +499,7 @@ function displayRaceResults(race, raceResults) {
         // sortByFinishPlace(result)
         const position = result.position === 'DNF' ? 'DNF' : `${result.position}`;
         const listItem = document.createElement('li');
-        listItem.innerHTML = `<img src="images/${result.driver.firstName}-${result.driver.lastName}.png" alt="" style="width: 60px;"> ${result.driver.firstName} ${result.driver.lastName}: ${result.result} - Position: ${position}`;
+        listItem.innerHTML = `<img src="images/${result.driver.firstName}-${result.driver.lastName}.png" alt="" style="width: 60px;"> ${result.driver.firstName} ${result.driver.lastName}: ${result.result} - Pozíció: ${position}`;
         resultsList.appendChild(listItem);
     });
     raceResultsContainer.appendChild(resultsList);
@@ -528,14 +528,14 @@ function displayChampionshipStandings() {
     const sortedStandings = Object.values(championshipStandings).sort((a, b) => b.points - a.points);
 
     const standingsHeader = document.createElement('h3');
-    standingsHeader.textContent = 'Championship Standings';
+    standingsHeader.textContent = 'Bajnokság állás';
     standingsContainer.appendChild(standingsHeader);
 
     const standingsList = document.createElement('ol');
     let szamozas = 1
     sortedStandings.forEach((standing, index) => {
         const listItem = document.createElement('li');
-        listItem.innerHTML = `${szamozas}. <img src="images/${standing.driver.firstName}-${standing.driver.lastName}.png" alt="" style="width: 60px;"> ${standing.driver.firstName} ${standing.driver.lastName} - ${standing.points} points`;
+        listItem.innerHTML = `${szamozas}. <img src="images/${standing.driver.firstName}-${standing.driver.lastName}.png" alt="" style="width: 60px;"> ${standing.driver.firstName} ${standing.driver.lastName} - ${standing.points} pont`;
         standingsList.appendChild(listItem);
         szamozas++;
     });
@@ -546,7 +546,7 @@ function displayChampionshipStandings() {
 function displayPlayerMoney() {
     console.log("Displaying player money...");
     const moneyDisplay = document.getElementById('money-display');
-    moneyDisplay.textContent = `Money: $${playerMoney}`;
+    moneyDisplay.textContent = `Pénz: $${playerMoney}`;
 }
 
 // Function to initialize the application
